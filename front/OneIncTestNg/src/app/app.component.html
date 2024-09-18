@@ -1,0 +1,71 @@
+
+<div class="cover-container w-100 h-100 p-3">
+  
+  <main class="px-3">
+    <h1>Long running task {{currentProcessingJobId}}</h1>
+    <p>This test simulates a long running server task.</p>
+    <p>Enter some text and click convert to run the simulation. Click cancel anytime while running the task.</p>
+    
+    <p>
+      @if(runningState === runningStateEnum.Ready ){
+        <p>
+          <input type="text" [(ngModel)]="stringToConvert"/>
+        </p>
+        <a href="#" 
+          (click)="startNewJob()" 
+          class="btn"
+          [class.disabled]="signalRService.connectedToServer === false || stringToConvert.length === 0">
+          <span>Convert </span>
+        </a>
+      }
+      @else {
+        <div>Server data: {{serverStringData}}</div>
+      }
+    </p>
+    @if(runningState === runningStateEnum.Ready ){
+    <p class="connection">
+      Connection status: 
+      @if(signalRService.connectedToServer){
+        <div class="connection-icon online"></div>
+      }
+      @else {
+        <div class="connection-icon offline"></div>
+      }
+    </p>
+    }
+    @if(runningState === runningStateEnum.Running){
+      <p class="connection">
+        <span>Please wait, your task is running: </span>        
+        <span class="connection-icon online pulse"></span>
+        <span class="cancel" (click)="cancelLongRunningJob(currentProcessingJobId)">cancel</span> 
+      </p>      
+    }
+    @if(runningState === runningStateEnum.Complete){
+      <p class="connection">
+        <span>Task complete: </span>        
+        <span class="connection-icon online"></span>
+        <span class="cancel" (click)="reset()">reset</span> 
+      </p>      
+    }
+    @if(runningState === runningStateEnum.Cancelled){
+      <p class="connection">
+        <span>Task cancelled: </span>        
+        <span class="connection-icon offline"></span>
+        <span class="cancel" (click)="reset()">reset</span> 
+      </p>      
+    }
+    @if(runningState === runningStateEnum.Error){
+      <p class="connection">
+        <span>Task Error: </span>        
+        <span class="connection-icon offline"></span>
+        <span class="cancel" (click)="reset()">reset</span> 
+      </p>   
+      <p>
+        <span>{{error}}</span>
+      </p>   
+    }
+  </main>
+  
+  <router-outlet />
+
+</div>

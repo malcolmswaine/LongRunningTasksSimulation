@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/back/PaaS/.containers/db
+/back/bin/Debug/net8.0
+/back/.vs
+/back/obj
+/front/OneIncTestNg/.vscode
+/.vs
