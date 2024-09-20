@@ -44,9 +44,9 @@ Ensure both containers are running
 Bring the front end container online
 
 
-<Project Root>/>cd Front
+$\<Project Root\>/>cd Front
 
-<Project Root>/Front/>docker-compose up
+$\<Project Root\>/Front/>docker-compose up
 
 This should bring up the front end UI on
 http://localhost:4200/
@@ -84,15 +84,15 @@ appsettings.json
 
 Open the FE directory with VS Code
 
-<Project Root>/>cd Front
+$\<Project Root\>/>cd Front
 
 Ensure that all packages are installed
 
-<Project Root>/Front/>npm i
+$\<Project Root\>/Front/>npm i
 
 Run the project
 
-<Project Root>/Front/>ng serve -o
+$\<Project Root\>/Front/>ng serve -o
 
 This should bring up the front end UI on
 http://localhost:4200/
