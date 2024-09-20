@@ -1,4 +1,13 @@
-Run this project in containers
+
+Overview
+========================
+
+This project simulates a long running saver task.
+
+The client is exoected to stay updated realtime as the task progresses and allow the user to cancel the task on the server gracefully while is is running
+
+
+# Run this project in containers
 
 ========================
 
