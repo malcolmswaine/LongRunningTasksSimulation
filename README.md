@@ -2,9 +2,13 @@
 Overview
 ========================
 
-This project simulates a long running saver task.
+This project simulates a long running server task.
 
-The client is exoected to stay updated realtime as the task progresses and allow the user to cancel the task on the server gracefully while is is running
+The client is expected to stay updated realtime using sockets, and as the task progresses are allow to cancel the task on the server gracefully.
+
+If the client is disconnected, then they should be informed and the app should attempt to reconnect when the server is available.
+
+The server jobs are persisted in and run in hangfire. 
 
 
 # Run this project in containers
