@@ -24,9 +24,9 @@ Ensure you have docker running
 Bring the back end containers online
 
 
-<Project Root>/>cd Back
+\<Project Root\>>cd Back
 
-<Project Root>/Back/>docker-compose up
+\<Project Root\>/Back/>docker-compose up
 
 This should bring up the web service on 
 https://localhost:8001/swagger/index.html
@@ -100,6 +100,7 @@ http://localhost:4200/
 
 ## Back end tests
 ========================
+
 Run NUnit tests from VS Test Explorer
 
 
