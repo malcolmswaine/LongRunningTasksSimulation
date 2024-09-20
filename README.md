@@ -22,6 +22,7 @@ Ensure you have docker running
 
 ## Bank end
 ========================
+
 Bring the back end containers online
 
 
@@ -39,6 +40,7 @@ Ensure both containers are running
 
 
 ## Front end
+
 ========================
 Bring the front end container online
 
@@ -54,9 +56,11 @@ Ensure that the Connection status is green (connected)
 
 
 # Or run locally
+
 ========================
 
 ## Bank end
+
 ========================
 In Visual Studio open the backend Solution file
 
