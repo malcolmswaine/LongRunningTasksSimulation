@@ -16,7 +16,7 @@ Bring the back end containers online
 This should bring up the web service on 
 https://localhost:8001/swagger/index.html
 
-And a postgres SQL database on
+... and a supportng postgres SQL database on
 port 5432
 
 
@@ -38,10 +38,10 @@ http://localhost:4200/
 Ensure that the Connection status is green (connected)
 
 
-Running Bank end locally
+Alternatively run Bank end locally
 ========================
 
-Use Debug configuration
+Use  VS Debug configuration
 
 Uncomment the ConnectionStrings in appsettings.development.json (issue with docker compose picking up incorrect config)
 
