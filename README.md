@@ -38,4 +38,30 @@ http://localhost:4200/
 Ensure that the Connection status is green (connected)
 
 
+Running Bank end locally
+========================
+
+Use Debug configuration
+
+Uncomment the ConnectionStrings in appsettings.development.json (issue with docker compose picking up incorrect config)
+
+Taget the OI.Web.Services Project as startup
+
+Use the https launch settings
+
+this will launch the default swagger UI at
+https://localhost:8001/swagger/index.html
+
+The app is expecting a PostGres SQL instance to be listening on 5432, so either
+use the instance provided by running the 'docker-compose up' command to bring up
+a PostGres instance, or provide your own PostGres and modify the connection string in
+appsettings.json
+
+
+Bank end test
+========================
+Run NUnit tests from VS Test Explorer
+
+
+
 
