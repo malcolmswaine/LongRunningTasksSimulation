@@ -13,9 +13,7 @@ If the client is disconnected, then they should be informed and the app should a
 The server jobs are persisted in and run in hangfire. 
 
 
-# Run this project in containers
-
-========================
+# Running this project in containers
 
 Ensure you have docker running 
 
