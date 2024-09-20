@@ -25,6 +25,7 @@ Bring the back end containers online
 
 
 <Project Root>/>cd Back
+
 <Project Root>/Back/>docker-compose up
 
 This should bring up the web service on 
