@@ -4,6 +4,8 @@ Overview
 
 This project simulates a long running server task.
 
+The project is split up into 2 folders - Front and Bank representing the front end UI (Angular + Node) and back end services (.NET Core + Postgres)
+
 The client is expected to stay updated realtime using sockets, and as the task progresses are allow to cancel the task on the server gracefully.
 
 If the client is disconnected, then they should be informed and the app should attempt to reconnect when the server is available.
