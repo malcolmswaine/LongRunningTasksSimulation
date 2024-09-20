@@ -49,7 +49,7 @@ Bring the front end container online
 
 <Project Root>/Front/>docker-compose up
 
-This should bring up the web service on 
+This should bring up the front end UI on
 http://localhost:4200/
 
 Ensure that the Connection status is green (connected)
@@ -61,7 +61,6 @@ Ensure that the Connection status is green (connected)
 
 ## Bank end
 
-========================
 In Visual Studio open the backend Solution file
 
 /Back/OI.Web.sln
@@ -81,6 +80,23 @@ The app is expecting a PostGres SQL instance to be listening on 5432, so either
 use the instance provided by running the 'docker-compose up' in the parent directory to bring up
 a PostGres instance, or provide your own PostGres and modify the connection string in
 appsettings.json
+
+## Front end
+
+Open the FE directory with VS Code
+
+<Project Root>/>cd Front
+
+Ensure that all packages are installed
+
+<Project Root>/Front/>npm i
+
+Run the project
+
+<Project Root>/Front/>ng serve -o
+
+This should bring up the front end UI on
+http://localhost:4200/
 
 
 ## Back end tests
