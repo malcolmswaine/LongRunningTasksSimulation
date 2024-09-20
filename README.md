@@ -29,6 +29,7 @@ Bring the front end container online
 
 
 <Project Root>/>cd Front
+
 <Project Root>/Front/>docker-compose up
 
 This should bring up the web service on 
