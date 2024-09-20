@@ -1,0 +1,4 @@
+﻿Rebuild EF Models POCOs
+============================
+
+dotnet ef dbcontext scaffold "Host=localhost;Port=5432;Database=longrunning;Username=postgres;Password=postgres;Include Error Detail=true" Npgsql.EntityFrameworkCore.PostgreSQL -o Models --force --no-build

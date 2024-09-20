@@ -1,0 +1,159 @@
+using Ganss.Xss;
+using Hangfire;
+using Hangfire.PostgreSql;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using OI.Web.Services;
+using OI.Web.Services.Models;
+using OI.Web.Services.Utils;
+
+Console.WriteLine("--> Starting Job Server");
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddCors();
+
+var dbConnectionSting = builder.Configuration.GetConnectionString("HangfireDatabase");
+
+// Add a DB Context
+builder.Services.AddDbContext<LongrunningContext>(options => options.UseNpgsql(dbConnectionSting));
+
+// Why hangfire?
+// Offers some out-of-the box features for monitoring, managing and persisting background job state
+builder.Services.AddHangfire(
+    config => config.UsePostgreSqlStorage(
+        options => options.UseNpgsqlConnection(dbConnectionSting)));
+builder.Services.AddHangfireServer(options => options.SchedulePollingInterval = TimeSpan.FromSeconds(1));
+
+
+builder.Services.AddTransient<ITaskDelay, TaskDelay>();
+builder.Services.AddTransient<ICheckPoint, CheckPoint>();
+builder.Services.AddTransient<LongRunningTask>();
+// We need to keep a record of the running tasks in memory in case we need to cancel them
+builder.Services.AddSingleton<LongRunningTasks>();
+
+
+// We're going to signal the clients - will try to use sockets, but downgrade to long polling on failure
+builder.Services.AddSignalR();
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+// For demo let's keep it simple and migrate every time
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<LongrunningContext>();
+    try
+    {
+        db.Database.Migrate();
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine($"Warning: migrating data returned response {e.ToString()}");
+    }
+}
+
+// Create a new job
+app.MapPost("Jobs", async (
+        string sigrConnId,
+        [FromBody] ConversionPayload conversionPayload,
+        IBackgroundJobClient backgroundJobClient, 
+        IHubContext<JobsHub> hubContext,
+        LongRunningTasks longRunningTasks) =>
+{
+    CancellationTokenSource cancellationTokenSource = new();
+
+    // remove any nasties
+    var sanitizer = new HtmlSanitizer();
+    var safeStringToConvert = sanitizer.Sanitize(conversionPayload.stringToConvert);
+
+    // Start the job
+    string jobId = backgroundJobClient.Enqueue<LongRunningTask>(job => 
+        job.ExecuteAsync(
+            cancellationTokenSource.Token, 
+            sigrConnId,
+            safeStringToConvert,
+            StringTransformService.Base64Encode(safeStringToConvert), 
+            null));
+
+    // We need to map the jobs to the cancellation tokens
+    longRunningTasks.Tasks.Add(jobId, cancellationTokenSource);
+
+    // Let the caller know, we've started the job
+    await hubContext.Clients.Client(sigrConnId).SendAsync("ReceiveNotification", $"Started processing job with ID: {jobId}");
+
+    return Results.AcceptedAtRoute("JobDetails", new { jobId }, jobId);
+});
+
+
+// Get the details of a current job
+app.MapGet("jobs/{jobId}", (string jobId) =>
+{
+    var jobDetails = JobStorage.Current.GetMonitoringApi().JobDetails(jobId);
+    return jobDetails.History.OrderByDescending(h => h.CreatedAt).First().StateName;
+})
+.WithName("JobDetails");
+
+
+// Cancel a job (tempted to use delete verb, but not acutally deleting the entity)
+app.MapPut("jobs/{jobId}", async (string jobId,
+    [FromQuery] string sigrConnId,
+    LongRunningTasks longRunningTasks, 
+    IHubContext<JobsHub> hubContext,
+    ILogger<LongRunningTask> logger ) =>
+{
+    // TODO - use token to validate we are the owner
+
+    var jobDetails = JobStorage.Current.GetMonitoringApi().JobDetails(jobId);
+    if (jobDetails != null)
+    {
+        try
+        {
+            longRunningTasks.Tasks[jobId].Cancel();            
+            var result = BackgroundJob.Delete(jobId);
+
+            //await hubContext.Clients.Client(hubContext.)
+
+            await hubContext.Clients.Client(sigrConnId).SendAsync("job-cancelled", jobId);
+            logger.LogInformation($"job-cancelled: {jobId}");
+        }
+        catch (Exception e)
+        {
+            await hubContext.Clients.Client(sigrConnId).SendAsync("job-error", e.ToString());
+            logger.LogInformation($"job-error {e.ToString()}");
+        }
+
+    }
+    else
+    {
+        return Results.NotFound();
+    }
+
+    return Results.Ok("cancelled");
+
+})
+.WithName("cancel");
+
+
+app.UseWebSockets();
+app.UseRouting();
+
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true)
+    .AllowCredentials());
+
+app.MapHub<JobsHub>("jobshub");
+
+app.Run();
+
+record ConversionPayload(string stringToConvert);

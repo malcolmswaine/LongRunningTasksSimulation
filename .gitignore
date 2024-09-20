@@ -2,9 +2,17 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/back/PaaS/.containers/db
-/back/bin/Debug/net8.0
-/back/.vs
-/back/obj
-/front/OneIncTestNg/.vscode
-/.vs
+/Back/.containers/db
+/Back/.vs
+/Back/bin
+/Back/obj
+/Back/OI.Web.Services/.containers/db
+/Back/OI.Web.Services/.vs
+/Back/OI.Web.Services/bin
+/Back/OI.Web.Services/obj
+/Back/OI.Web.Services.Test/bin
+/Back/OI.Web.Services.Test/obj
+/Front/.containers/db
+/Front/.vs
+/Front/obj/Docker
+/Front/OI.Web.Static/.vscode

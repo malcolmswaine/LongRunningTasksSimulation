@@ -1,0 +1,25 @@
+services:
+
+ # The .NET APP
+  oi.web.services:
+    image: ${DOCKER_REGISTRY-}oiwebservices
+    build:
+      context: .
+      dockerfile: OI.Web.Services/Dockerfile
+    depends_on:
+      - oi.database
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+
+  # The database
+  oi.database:
+    image: postgres:latest
+    environment:
+    - POSTGRES_DB=longrunning
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./.containers/db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432

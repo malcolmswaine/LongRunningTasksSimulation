@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35208.52
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C05FC0CA-D349-49E1-964B-AE2F1E73B9FF}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "OI.Web.Static", "OI.Web.Static\", "{4F6942F8-1E8C-4309-B9A8-1AB44F52E89A}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_64543"
+		Debug.AspNetCompiler.PhysicalPath = "OI.Web.Static\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64543\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_64543"
+		Release.AspNetCompiler.PhysicalPath = "OI.Web.Static\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64543\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "64543"
+		SlnRelativePath = "OI.Web.Static\"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C05FC0CA-D349-49E1-964B-AE2F1E73B9FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C05FC0CA-D349-49E1-964B-AE2F1E73B9FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C05FC0CA-D349-49E1-964B-AE2F1E73B9FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C05FC0CA-D349-49E1-964B-AE2F1E73B9FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F6942F8-1E8C-4309-B9A8-1AB44F52E89A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F6942F8-1E8C-4309-B9A8-1AB44F52E89A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F6942F8-1E8C-4309-B9A8-1AB44F52E89A}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F6942F8-1E8C-4309-B9A8-1AB44F52E89A}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A2EA164C-B9A2-4C33-B5E1-AC66B53AAB54}
+	EndGlobalSection
+EndGlobal

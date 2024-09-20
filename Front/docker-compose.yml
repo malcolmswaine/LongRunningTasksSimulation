@@ -1,0 +1,10 @@
+services:
+
+  # The Angaulr FE
+  oi.web.static:
+    image: ${DOCKER_REGISTRY-}oiwebstatic
+    build:
+      context: .
+      dockerfile: OI.Web.Static/Dockerfile
+    ports:
+      - "4200:4200"
