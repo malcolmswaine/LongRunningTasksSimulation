@@ -38,20 +38,20 @@ Do these steps in order!
 
 ## Database
 
-With a command prompt drop into the project DB folder
+With a command prompt drop into the project DB folder\
   $\<Project Root\>cd DB
 
-Run the docker compose up command
+Run the docker compose up command\
 $\<Project Root\DB\>docker-compose up
 
 This should bring up a Postgres instance in a container with port 5432 exposed.
  
 ## Bank end .NET
 
-With a command prompt drop into the project Back folder
+With a command prompt drop into the project Back folder\
   $\<Project Root\>cd Back
   
-Run the docker compose up command
+Run the docker compose up command\
 $\<Project Root\Back\>docker-compose up
 
 This will run an initial data migration, so make sure the database is online and accepting connections.
