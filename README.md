@@ -104,7 +104,7 @@ In Visual Studio open the backend Solution file from\
 
 Ensure that the solution configuration is set to **Debug**\
 Ensure that the startup project is set to **OI.Web.Services**\
-Ensure that the launch configuration is set to **https**\
+Ensure that the launch configuration is set to **https**
 
 Run the project OI.Web.Services project; this will launch the default swagger UI at:
 
