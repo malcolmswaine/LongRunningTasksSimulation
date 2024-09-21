@@ -38,20 +38,20 @@ Do these steps in order!
 
 ## Database
 
-With a command prompt drop into the project DB folder
+With a command prompt drop into the project DB folder\
   $\<Project Root\>cd DB
 
-Run the docker compose up command
+Run the docker compose up command\
 $\<Project Root\DB\>docker-compose up
 
 This should bring up a Postgres instance in a container with port 5432 exposed.
  
 ## Bank end .NET
 
-With a command prompt drop into the project Back folder
+With a command prompt drop into the project Back folder\
   $\<Project Root\>cd Back
   
-Run the docker compose up command
+Run the docker compose up command\
 $\<Project Root\Back\>docker-compose up
 
 This will run an initial data migration, so make sure the database is online and accepting connections.
@@ -64,10 +64,10 @@ https://localhost:8001/swagger/index.html
 
 ## Front end
 
-With a command prompt drop into the project Back folder
+With a command prompt drop into the project Back folder\
   $\<Project Root\>cd Front
   
-Run the docker compose up command
+Run the docker compose up command\
 $\<Project Root\Front\>docker-compose up
   
 This should spin up a container that hosts the front end UI.
@@ -88,22 +88,22 @@ and server has been created
 ## Database
 If you don't want to use the containerised Postgres ...
 
-Install a Postgres server locally
+Install a Postgres server locally\
 https://www.postgresql.org/download/
 
-On installation ensure sure that the server has the following credentials to allow the .NET to connect
-Username=postgres
-Password=postgres
+On installation ensure sure that the server has the following credentials to allow the .NET to connect\
+Username=postgres\
+Password=postgres\
 Port=5432
 
 ## Bank end
 Make sure the supporting database is online from the previous step
 
-In Visual Studio open the backend Solution file from
+In Visual Studio open the backend Solution file from\
 \<Project Root>\Back\OI.Web.sln
 
-Ensure that the solution configuration is set to **Debug**
-Ensure that the startup project is set to **OI.Web.Services**
+Ensure that the solution configuration is set to **Debug**\
+Ensure that the startup project is set to **OI.Web.Services**\
 Ensure that the launch configuration is set to **https**
 
 Run the project OI.Web.Services project; this will launch the default swagger UI at:
@@ -113,13 +113,13 @@ https://localhost:8001/swagger/index.html
 ## Front end
 Make sure the supporting database and the back end are both online.
 
-In VS Code open the directory where the Angular app is located
+In VS Code open the directory where the Angular app is located\
 \<Project Root>\Front\OI.Web.Static
 
-Make sure the NPM packages are up to date
+Make sure the NPM packages are up to date\
 $<Project Root>\Front\OI.Web.Static>npm i
   
-Run the project
+Run the project\
 $<Project Root>\Front\OI.Web.Static>ng serve -o
 
 This should bring up the front end UI on
