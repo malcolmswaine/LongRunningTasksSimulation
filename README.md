@@ -10,6 +10,22 @@ If the client is disconnected, then they should be informed, and the app should 
 
 Jobs on the server should provide resilient to server failure and persistence for recovery and audit.
 
+
+###Example of the app functioning:
+input = "Hello, World!". Generated base64="SGVsbG8sIFdvcmxkIQ=="\
+What web client receives from the server:\
+Random pause… "S"\
+Random pause… "G"\
+Random pause… "V"\
+Random pause… "s"\
+Etc.\
+What does user see in the result text field on web UI:\
+Random pause… "S"\
+Random pause… "SG"\
+Random pause… "SGV"\
+Random pause… "SGVs"\
+Etc.
+
 # Running the project
   
 Clone the project source from github
@@ -146,4 +162,11 @@ For simplicity this project uses username/password coded into the configuration 
 
 For demo purposes the migration runs every time the back end is brought up. This can lead to 'already exists' migration warnings in the console if the database has already been populated, but can be safely ignored for demo purposes.
 
+The default log level is "Information" for release also, for demo purposes.
+
 Hangfire spits out a lot of randomness to the console
+
+## Todo
+
+Add authentication\
+Clear down SignalR Connection mapping 

@@ -71,6 +71,8 @@ namespace OI.Web.Services.Test
 
 
             // Assert
+            Assert.That(checkPointMock.Invocations.Count(), Is.EqualTo(22));
+            Assert.That(mockClient.Invocations.Count(), Is.EqualTo(21));
             Assert.That(processedString, Is.EqualTo(expected));
         }
 
@@ -99,8 +101,7 @@ namespace OI.Web.Services.Test
 
             // We want to be able to cancel
             CancellationTokenSource cancellationTokenSource = new();
-            var cancellationToken = new CancellationTokenSource().Token;
-
+            
 
             // Act
             var testLongRunningTask = new LongRunningTask(logger,
@@ -112,7 +113,7 @@ namespace OI.Web.Services.Test
             cancellationTokenSource.Cancel();
 
             var processedString = await testLongRunningTask.ExecuteAsync(
-                cancellationToken,
+                cancellationTokenSource.Token,
                 "",
                 testString,
                 transformed,
@@ -120,6 +121,7 @@ namespace OI.Web.Services.Test
 
 
             // Assert
+            Assert.That(mockClient.Invocations.Count(), Is.EqualTo(1)); // we told the client we cancelled
             Assert.That(processedString, Is.EqualTo(expected));
         }
     }

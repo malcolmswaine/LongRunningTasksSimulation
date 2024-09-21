@@ -25,7 +25,6 @@ namespace OI.Web.Services
             // Process each step
             for (int i = 0; i < encodedString.Length; i++) {
 
-                //logger.LogInformation($"on step {i}");
 
                 try
                 {
