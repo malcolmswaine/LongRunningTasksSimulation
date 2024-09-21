@@ -1,11 +1,11 @@
-﻿namespace OI.Web.Services.Utils
+﻿namespace OI.Web.Services.Infrastructure
 {
-    public class StringTransformService
+    public class StringTransformer
     {
         public static string Base64Encode(string plainText)
         {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
-            return System.Convert.ToBase64String(plainTextBytes);
+            return Convert.ToBase64String(plainTextBytes);
         }
     }
 }

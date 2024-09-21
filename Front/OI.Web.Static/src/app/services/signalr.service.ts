@@ -54,7 +54,7 @@ export class SignalRService {
     this.hubConnection.on('job-cancelled', (message) => {
       console.log(`job-cancelled: ${message}`);
 
-      this.jobDataCompleteSubject.next({});
+      this.jobCancelledSubject.next({});
     });
 
     this.hubConnection.on('job-error"', (message) => {

@@ -16,3 +16,4 @@
 /Front/.vs
 /Front/obj/Docker
 /Front/OI.Web.Static/.vscode
+/DB/.containers/db

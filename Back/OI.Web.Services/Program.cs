@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using OI.Web.Services;
+using OI.Web.Services.Infrastructure;
 using OI.Web.Services.Models;
-using OI.Web.Services.Utils;
 
 Console.WriteLine("--> Starting Job Server");
 
@@ -16,17 +16,25 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
-var dbConnectionSting = builder.Configuration.GetConnectionString("HangfireDatabase");
 
 // Add a DB Context
+var dbConnectionSting = builder.Configuration.GetConnectionString("HangfireDatabase");
 builder.Services.AddDbContext<LongrunningContext>(options => options.UseNpgsql(dbConnectionSting));
 
+
 // Why hangfire?
-// Offers some out-of-the box features for monitoring, managing and persisting background job state
+// Offers some out-of-the box features for job retry on failure, monitoring, management and persisting background job state
 builder.Services.AddHangfire(
     config => config.UsePostgreSqlStorage(
         options => options.UseNpgsqlConnection(dbConnectionSting)));
-builder.Services.AddHangfireServer(options => options.SchedulePollingInterval = TimeSpan.FromSeconds(1));
+builder.Services.AddHangfireServer(
+    options => {
+        options.SchedulePollingInterval = TimeSpan.FromSeconds(1);
+        }
+    );
+
+// We don't want this for demo if we're stopping and starting local dev server often
+GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute() { Attempts = 0 });
 
 
 builder.Services.AddTransient<ITaskDelay, TaskDelay>();
@@ -34,18 +42,24 @@ builder.Services.AddTransient<ICheckPoint, CheckPoint>();
 builder.Services.AddTransient<LongRunningTask>();
 // We need to keep a record of the running tasks in memory in case we need to cancel them
 builder.Services.AddSingleton<LongRunningTasks>();
+// Global exception handling service
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 
-// We're going to signal the clients - will try to use sockets, but downgrade to long polling on failure
+// Use signalling to inform clients of job status
 builder.Services.AddSignalR();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
+// Demo purposes!
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
+
+Console.WriteLine($"--> Is Development Mode {app.Environment.IsDevelopment()}");
 
 // For demo let's keep it simple and migrate every time
 using (var scope = app.Services.CreateScope())
@@ -81,7 +95,7 @@ app.MapPost("Jobs", async (
             cancellationTokenSource.Token, 
             sigrConnId,
             safeStringToConvert,
-            StringTransformService.Base64Encode(safeStringToConvert), 
+            StringTransformer.Base64Encode(safeStringToConvert), 
             null));
 
     // We need to map the jobs to the cancellation tokens
@@ -110,8 +124,6 @@ app.MapPut("jobs/{jobId}", async (string jobId,
     IHubContext<JobsHub> hubContext,
     ILogger<LongRunningTask> logger ) =>
 {
-    // TODO - use token to validate we are the owner
-
     var jobDetails = JobStorage.Current.GetMonitoringApi().JobDetails(jobId);
     if (jobDetails != null)
     {
@@ -119,8 +131,6 @@ app.MapPut("jobs/{jobId}", async (string jobId,
         {
             longRunningTasks.Tasks[jobId].Cancel();            
             var result = BackgroundJob.Delete(jobId);
-
-            //await hubContext.Clients.Client(hubContext.)
 
             await hubContext.Clients.Client(sigrConnId).SendAsync("job-cancelled", jobId);
             logger.LogInformation($"job-cancelled: {jobId}");
@@ -142,6 +152,7 @@ app.MapPut("jobs/{jobId}", async (string jobId,
 })
 .WithName("cancel");
 
+app.UseExceptionHandler();
 
 app.UseWebSockets();
 app.UseRouting();

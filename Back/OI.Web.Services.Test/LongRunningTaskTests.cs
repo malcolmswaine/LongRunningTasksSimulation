@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using OI.Web.Services.Models;
-using OI.Web.Services.Utils;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.OpenApi.Any;
+using OI.Web.Services.Infrastructure;
 
 namespace OI.Web.Services.Test
 {
@@ -21,7 +21,7 @@ namespace OI.Web.Services.Test
             var testString = "Hello World!";
             var expected = "SGVsbG8gV29ybGQh";
 
-            var transformed = StringTransformService.Base64Encode(testString);
+            var transformed = StringTransformer.Base64Encode(testString);
 
             Assert.That(transformed, Is.EqualTo(expected));
         }
@@ -60,7 +60,56 @@ namespace OI.Web.Services.Test
             var testLongRunningTask = new LongRunningTask(logger,
                 mockHub.Object, checkPointMock.Object, taskDelay.Object);
 
-            var transformed = StringTransformService.Base64Encode(testString);
+            var transformed = StringTransformer.Base64Encode(testString);
+
+            var processedString = await testLongRunningTask.ExecuteAsync(
+                cancellationToken,
+                "",
+                testString,
+                transformed,
+                null);
+
+
+            // Assert
+            Assert.That(processedString, Is.EqualTo(expected));
+        }
+
+
+        [Test]
+        public async Task RunBackgroundTaskWithCancelledSet_WhenComplete_ExpectNoStringConversion()
+        {
+            var testString = "Hi World!";
+            var expected = "";
+
+            // Arrange
+            var logger = new NullLogger<LongRunningTask>();
+            var mockHub = new Mock<IHubContext<JobsHub>>();
+            var mockClients = new Mock<IHubClients>();
+            var mockClient = new Mock<ISingleClientProxy>();
+
+            mockClients.Setup(clients => clients.Client(It.IsAny<string>())).Returns(mockClient.Object);
+            mockHub.Setup(hub => hub.Clients).Returns(mockClients.Object);
+
+            var checkPointMock = new Mock<ICheckPoint>();
+            checkPointMock.Setup(m => m.JobStart(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()));
+
+            // We don't really need a delay at unit test level
+            var taskDelay = new Mock<ITaskDelay>();
+            taskDelay.Setup(m => m.Delay(It.IsAny<int>()));
+
+            // We want to be able to cancel
+            CancellationTokenSource cancellationTokenSource = new();
+            var cancellationToken = new CancellationTokenSource().Token;
+
+
+            // Act
+            var testLongRunningTask = new LongRunningTask(logger,
+                mockHub.Object, checkPointMock.Object, taskDelay.Object);
+
+            var transformed = StringTransformer.Base64Encode(testString);
+
+            // cancel the job
+            cancellationTokenSource.Cancel();
 
             var processedString = await testLongRunningTask.ExecuteAsync(
                 cancellationToken,

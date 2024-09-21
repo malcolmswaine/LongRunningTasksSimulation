@@ -16,15 +16,6 @@ public partial class LongrunningContext : DbContext
     {
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json")
-            .Build();
-        optionsBuilder.UseNpgsql(configuration.GetConnectionString("HangfireDatabase"));
-    }
-
     public virtual DbSet<Aggregatedcounter> Aggregatedcounters { get; set; }
 
     public virtual DbSet<Counter> Counters { get; set; }

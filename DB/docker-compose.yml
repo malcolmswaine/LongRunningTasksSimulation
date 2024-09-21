@@ -1,0 +1,13 @@
+services:
+
+  # The database
+  oi.database:
+    image: postgres:latest
+    environment:
+    - POSTGRES_DB=longrunning
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./.containers/db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
