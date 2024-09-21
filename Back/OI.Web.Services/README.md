@@ -1,6 +1,7 @@
 ﻿To run this project
 ====================
 
+!!Important - make sure the database is online from the DB project!!
 
 Docker Compose
 ====================
@@ -10,35 +11,32 @@ cd ..
 run the command (requires docker or docker desktop to be installed)
 docker-compose up
 
-this will start containers for both the back and it's supporting database
+This will run an initial data migration, so make sure the database is online and accepting connections.
 
-Check the wep api us launched at (sometimes ports aren't displayed in docker desktop)
+The new container instance should create a web server exposing http on port 8000, and https on 8001
+
+Open the swagger gen to check everything is working 
+
 https://localhost:8001/swagger/index.html
 
-Be aware that if you have a local PostGres server running on port 5432 this will conflict 
-with the port mapping of the PostGres exposed on the container port mapping, so 
-the local server instance should be stopped first.
 
 
 VS Local
 ======================
-Use Debug configuration
+In Visual Studio open the backend Solution file from
+\<Project Root>\Back\OI.Web.sln
 
-Uncomment the ConnectionStrings in appsettings.development.json (issue with docker compose picking up incorrect config)
+Ensure that the solution configuration is set to **Debug**
+Ensure that the startup project is set to **OI.Web.Services**
+Ensure that the launch configuration is set to **https**
 
-Taget the OI.Web.Services Project as startup
+Run the project OI.Web.Services project; this will launch the default swagger UI at:
 
-Use the https launch settings
-
-this will launch the default swagger UI at
 https://localhost:8001/swagger/index.html
 
-The app is expecting a PostGres SQL instance to be listening on 5432, so either
-use the instance provided by running the 'docker-compose up' command to bring up
-a PostGres instance, or provide your own PostGres and modify the connection string in
-appsettings.json
 
 
 Tests
 ======================
-Run NUnit tests from VS Test Explorer
+
+Run the NUnit tests from Visual Studio Test Explorer
