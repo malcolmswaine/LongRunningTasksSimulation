@@ -180,6 +180,6 @@ Hangfire spits out a lot of randomness to the console
 
 Add authentication\
 Clear down SignalR Connection mapping\
-Add a message bus to the solution
-Move the job service to a standalone microservice
+Add a message bus to the solution\
+Move the job service to a standalone microservice\
 Wire up the message bus and the job service
