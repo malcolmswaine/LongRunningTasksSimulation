@@ -37,8 +37,9 @@ The project is structured into 3 top level folders representing the Angular Fron
 - Front
 - DB
 
-You can either run the project in completely containers, or run it locally by installing a local Postgres DB for
-the Database, running the Back end from Visual Studio, and front end from VS Code (recommended)
+You can either run the project completely in containers (requires docker), or run it locally in Visual Studio.\ 
+To run locally you will need to supply a local Postgres DB (see Run the project locally -> Database).\
+Recommended to run the back end from Full Visual Studio, and front end from VS Code.
 
 ## Running the project in containers
 
