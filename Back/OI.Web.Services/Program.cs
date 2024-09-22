@@ -167,4 +167,5 @@ app.MapHub<JobsHub>("jobshub");
 
 app.Run();
 
+public partial class Program { } // Expose for in tests
 record ConversionPayload(string stringToConvert);

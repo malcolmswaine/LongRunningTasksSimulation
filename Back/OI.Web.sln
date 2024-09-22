@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OI.Web.Services", "OI.Web.S
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C05FC0CA-D349-49E1-964B-AE2F1E73B9FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OI.Web.Services.Test", "OI.Web.Services.Test\OI.Web.Services.Test.csproj", "{D35FE3A5-1AFC-47FD-BEB9-C0D12F1F6E5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OI.Web.Services.Test", "OI.Web.Services.Test\OI.Web.Services.Test.csproj", "{D35FE3A5-1AFC-47FD-BEB9-C0D12F1F6E5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OI.Web.Tests.Int", "OI.Web.Tests.Int\OI.Web.Tests.Int.csproj", "{6141C679-0961-4F26-8249-A8C4C457B12C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{D35FE3A5-1AFC-47FD-BEB9-C0D12F1F6E5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D35FE3A5-1AFC-47FD-BEB9-C0D12F1F6E5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D35FE3A5-1AFC-47FD-BEB9-C0D12F1F6E5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6141C679-0961-4F26-8249-A8C4C457B12C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6141C679-0961-4F26-8249-A8C4C457B12C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6141C679-0961-4F26-8249-A8C4C457B12C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6141C679-0961-4F26-8249-A8C4C457B12C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

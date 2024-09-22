@@ -17,3 +17,5 @@
 /Front/obj/Docker
 /Front/OI.Web.Static/.vscode
 /DB/.containers/db
+/Back/OI.Web.Tests.Int/bin/Debug/net8.0
+/Back/OI.Web.Tests.Int/obj

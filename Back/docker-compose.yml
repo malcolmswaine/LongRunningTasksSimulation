@@ -6,7 +6,7 @@ services:
     #network_mode: host
     build:
       context: .
-      dockerfile: OI.Web.Services/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
       - "8001:8001"

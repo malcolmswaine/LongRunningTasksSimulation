@@ -13,10 +13,10 @@ namespace OI.Web.Services
         Random random = new();
 
         public async Task<string> ExecuteAsync(CancellationToken cancellationToken, string sigrConnId,
-            string originalString, string encodedString, PerformContext? context)
+            string originalString, string encodedString, PerformContext context)
         {
-            // Hangfire job id is a string type! (also no interface to mock this, so when testing just use 0)
-            string jobId = context?.BackgroundJob.Id ?? "0";
+            // Hangfire job id is a string type...
+            string jobId = context.BackgroundJob.Id;
             string sentToClient = "";
 
             // Save a record of the job starting
@@ -24,7 +24,6 @@ namespace OI.Web.Services
 
             // Process each step
             for (int i = 0; i < encodedString.Length; i++) {
-
 
                 try
                 {
@@ -60,9 +59,7 @@ namespace OI.Web.Services
                     logger.LogError(e, "Exception thrown running job steps", null);
                     checkPoint.JobProgress(int.Parse(jobId), JobStateEnum.Error, e.ToString());
                     await hubContext.Clients.Client(sigrConnId).SendAsync("job-error", "There was an error processing the job");
-
                 }
-
             }
 
             // We've finished processing
