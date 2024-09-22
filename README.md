@@ -152,7 +152,11 @@ and server has been created
 In Visual Studio open the backend Solution file from
 \<Project Root>\Back\OI.Web.sln
 
+**Unit**\
 Run the NUnit tests from Visual Studio Test Explorer
+
+**Integration**\
+Run the xUnit tests from Visual Studio Test Explorer - will need docker to run these tests
 
   
   
