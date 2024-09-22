@@ -54,6 +54,8 @@ resolution of the local container instance
 There is an auto update option in docker desktop top under settings -> General -> Use the WSL 2 based engine -> Add the *.docker.internal names to the host's /etc/hosts file\
 **Make sure it's switched on!!**
 
+If you're not using container and just don't want to change your hosts file, edit the connection string in the Back/Oi.Web.Service project and change the Host=host.docker.internal to Host=localhost
+
 Do these steps in order!
 
 ## Database
