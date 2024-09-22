@@ -45,11 +45,14 @@ Recommended to run the back end from Full Visual Studio, and front end from VS C
 
 If youre hosting on a Windows machine, sure you have Docker Desktop and Windows Subsystem for Linux 2 (WSL2) installed and running.
 
-NOTE!!
+**IMPORTANT!!**
 On windows docker manages a DNS lookup **host.docker.internal** which **needs to present
 in your hosts file**, or have some name resolution in your network. This is to
 facilitate container to container communication where localhost maps to the 
 resolution of the local container instance
+
+There is an auto update option in docker desktop top under settings -> General -> Use the WSL 2 based engine -> Add the *.docker.internal names to the host's /etc/hosts file\
+**Make sure it's switched on!!**
 
 Do these steps in order!
 
@@ -77,7 +80,7 @@ The new container instance should create a web server exposing http on port 8000
 
 Open the swagger gen to check everything is working 
 
-https://localhost:8001/swagger/index.html
+http://localhost:8000/swagger/index.html
 
 ## Front end
 
@@ -121,11 +124,11 @@ In Visual Studio open the backend Solution file from\
 
 Ensure that the solution configuration is set to **Debug**\
 Ensure that the startup project is set to **OI.Web.Services**\
-Ensure that the launch configuration is set to **https**
+Ensure that the launch configuration is set to **http**
 
 Run the project OI.Web.Services project; this will launch the default swagger UI at:
 
-https://localhost:8001/swagger/index.html
+http://localhost:8000/swagger/index.html
 
 ## Front end
 Make sure the supporting database and the back end are both online.
