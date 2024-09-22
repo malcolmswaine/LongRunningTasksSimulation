@@ -174,7 +174,7 @@ For demo purposes the migration runs every time the back end is brought up. This
 
 The default log level is "Information" for release also, for demo purposes.
 
-Hangfire spits out a lot of randomness to the console
+There is sometimes a small delay when cancelling a job while the invocation is processed.
 
 ## Todo
 
