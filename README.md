@@ -37,12 +37,13 @@ The project is structured into 3 top level folders representing the Angular Fron
 - Front
 - DB
 
-You can either run the project in completely containers, or run it locally by installing a local Postgres DB for
-the Database, running the Back end from Visual Studio, and front end from VS Code (recommended)
+You can either run the project completely in containers (requires docker), or run it locally in Visual Studio.\ 
+To run locally you will need to supply a local Postgres DB (see Run the project locally -> Database).\
+Recommended to run the back end from Full Visual Studio, and front end from VS Code.
 
 ## Running the project in containers
 
-Make sure you have docker/docker desktop running
+If youre hosting on a Windows machine, sure you have Docker Desktop and Windows Subsystem for Linux 2 (WSL2) installed and running.
 
 NOTE!!
 On windows docker manages a DNS lookup **host.docker.internal** which **needs to present
@@ -152,7 +153,11 @@ and server has been created
 In Visual Studio open the backend Solution file from
 \<Project Root>\Back\OI.Web.sln
 
+**Unit**\
 Run the NUnit tests from Visual Studio Test Explorer
+
+**Integration**\
+Run the xUnit tests from Visual Studio Test Explorer - will need docker to run these tests
 
   
   
