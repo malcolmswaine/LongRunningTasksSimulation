@@ -43,7 +43,7 @@ Recommended to run the back end from Full Visual Studio, and front end from VS C
 
 ## Running the project in containers
 
-Make sure you have docker/docker desktop running
+If youre hosting on a Windows machine, sure you have Docker Desktop and Windows Subsystem for Linux 2 (WSL2) installed and running.
 
 NOTE!!
 On windows docker manages a DNS lookup **host.docker.internal** which **needs to present
