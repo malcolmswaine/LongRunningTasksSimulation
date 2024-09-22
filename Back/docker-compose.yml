@@ -9,24 +9,4 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
-      - "8001:8001"
-    # healthcheck:
-    #   test: pg_isready -U postgres -d longrunning
-    #   interval: 10s
-    #   timeout: 3s
-    #   retries: 3
-
-  # The database
-  # oi.database:
-  #   image: postgres:latest
-  #   environment:
-  #   - POSTGRES_DB=longrunning
-  #   - POSTGRES_USER=postgres
-  #   - POSTGRES_PASSWORD=postgres
-  #   volumes:
-  #     - ./.containers/db:/var/lib/postgresql/data
-  #   ports:
-  #     - 5432:5432
-# networks:
-#   example:
-#     driver: bridge
+      #- "8001:8001"

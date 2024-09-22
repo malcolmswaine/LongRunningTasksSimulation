@@ -1,4 +1,4 @@
 export const environment = {
-  WEBAPIHOST: 'https://localhost:8001',
-  SIGNALRHOST: 'https://localhost:8001',
+  WEBAPIHOST: 'http://localhost:8000',
+  SIGNALRHOST: 'http://localhost:8000',
 };
