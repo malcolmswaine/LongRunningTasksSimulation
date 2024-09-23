@@ -174,7 +174,7 @@ For demo purposes the migration runs every time the back end is brought up. This
 
 The default log level is set to "Information" for release - change as required.
 
-## Todo
+## Future Possible Enhancements
 
 Add authentication\
 Clear down SignalR Connection mapping\
