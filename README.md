@@ -172,9 +172,7 @@ For simplicity this project uses username/password coded into the configuration 
 
 For demo purposes the migration runs every time the back end is brought up. This can lead to 'already exists' migration warnings in the console if the database has already been populated, but can be safely ignored for demo purposes.
 
-The default log level is "Information" for release also, for demo purposes.
-
-There is sometimes a small delay when cancelling a job while the invocation is processed.
+The default log level is set to "Information" for release - change as required.
 
 ## Todo
 
