@@ -40,20 +40,17 @@ export class SignalRService {
       .build();
     
     this.hubConnection.on('job-processing-step', (message) => {
-      console.log(`job-processing-step: ${message}`);
 
       this.jobDataReceivedSubject.next(message);
     });
 
     this.hubConnection.on('job-complete', (message) => {
-      console.log(`job-complete: ${message}`);
-
+      
       this.jobDataCompleteSubject.next({});
     });
 
     this.hubConnection.on('job-cancelled', (message) => {
-      console.log(`job-cancelled: ${message}`);
-
+     
       this.jobCancelledSubject.next({});
     });
 
@@ -102,7 +99,6 @@ export class SignalRService {
           this.connectedToServer = true;
           this.sigrConnId = this.hubConnection.connectionId as string;
         }          
-        console.log('Connected started - status', hubConnectionState);
       });
   }
 }

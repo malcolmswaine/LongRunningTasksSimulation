@@ -18,16 +18,12 @@ namespace OI.Web.Services
                 job.ReturnedData = sentToClient;
                 job.UpdatedDateTime = DateTime.UtcNow;
                 context.SaveChanges();
-            }
-
-            logger.LogInformation($"job-processing-step sent, state {jobState}, message {sentToClient}");           
+            }          
         }
 
         // Save a audit of the job starting state
         public void JobStart(int jobId, string originalString, string encodedString)
         {
-
-            Console.WriteLine($"--> Is Development Mode {context.Database.GetConnectionString()}");
 
             Oijob ioj = new()
             {
@@ -43,7 +39,6 @@ namespace OI.Web.Services
             {
                 context.Oijobs.Add(ioj);
                 context.SaveChanges();
-                logger.LogInformation($"Starting conversion job {jobId} with string: {encodedString}");
             }
             catch (Exception ex)
             {

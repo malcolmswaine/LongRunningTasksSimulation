@@ -30,7 +30,6 @@ namespace OI.Web.Services
                     // User cancelled task
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        logger.LogInformation($"job-cancelled {i}");
                         checkPoint.JobProgress(int.Parse(jobId), JobStateEnum.Cancelled, sentToClient);
                         await hubContext.Clients.Client(sigrConnId).SendAsync("job-cancelled", i);
 
@@ -65,7 +64,6 @@ namespace OI.Web.Services
             // We've finished processing
             await hubContext.Clients.Client(sigrConnId).SendAsync("job-complete");
             checkPoint.JobProgress(int.Parse(jobId), JobStateEnum.Complete, sentToClient);
-            logger.LogInformation("job-complete");
 
             return sentToClient;
         }

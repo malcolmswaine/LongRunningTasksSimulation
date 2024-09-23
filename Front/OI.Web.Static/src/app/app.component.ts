@@ -51,7 +51,10 @@ export class AppComponent implements OnInit, OnDestroy {
         takeUntil(this.ngUnsubscribe)
        )
       .subscribe(message => {
-        this.serverStringData += message;
+        if(this.runningState === RunningStateEnum.Running) {
+          this.serverStringData += message;
+        }
+        
     })
 
     // Job is complete
@@ -61,15 +64,6 @@ export class AppComponent implements OnInit, OnDestroy {
        )
       .subscribe(message => {
         this.runningState = RunningStateEnum.Complete;
-    })
-
-    // Job was cancelled by user
-    this.signalRService.jobCancelledSubject
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-       )
-      .subscribe(message => {
-        this.runningState = RunningStateEnum.Cancelled;
     })
 
     // Job threw an exception
@@ -99,8 +93,6 @@ export class AppComponent implements OnInit, OnDestroy {
   // Start a new long running job on the server
   startNewJob() {
 
-    console.log("Starting new job");
-
     // basic checks...
     if(this.stringToConvert.length === 0) return;
 
@@ -122,7 +114,6 @@ export class AppComponent implements OnInit, OnDestroy {
           return throwError(() => error);
       }))
       .subscribe(jobId => {
-        console.log("Job started, id: ", jobId);
         this.currentProcessingJobId = jobId;
         this.runningState = RunningStateEnum.Running;
       })

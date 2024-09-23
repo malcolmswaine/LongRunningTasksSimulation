@@ -59,7 +59,6 @@ var app = builder.Build();
     app.UseSwaggerUI();
 //}
 
-Console.WriteLine($"--> Is Development Mode {app.Environment.IsDevelopment()}");
 
 // For demo let's keep it simple and migrate every time
 using (var scope = app.Services.CreateScope())
@@ -83,11 +82,18 @@ app.MapPost("Jobs", async (
         IHubContext<JobsHub> hubContext,
         LongRunningTasks longRunningTasks) =>
 {
+    
     CancellationTokenSource cancellationTokenSource = new();
 
     // remove any nasties
     var sanitizer = new HtmlSanitizer();
     var safeStringToConvert = sanitizer.Sanitize(conversionPayload.stringToConvert);
+
+    // Set on client, shouldn't happen
+    if (safeStringToConvert.Length > 1000)
+    {
+        return Results.BadRequest("String length exceeded");
+    }
 
     // Start the job
     string jobId = backgroundJobClient.Enqueue<LongRunningTask>(job => 
