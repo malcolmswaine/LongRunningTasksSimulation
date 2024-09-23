@@ -44,20 +44,17 @@ export class SignalRService {
       this.jobDataReceivedSubject.next(message);
     });
 
-    this.hubConnection.on('job-complete', (message) => {
-      
+    this.hubConnection.on('job-complete', (message) => {      
       this.jobDataCompleteSubject.next({});
     });
 
-    this.hubConnection.on('job-cancelled', (message) => {
-     
+    this.hubConnection.on('job-cancelled', (message) => {     
       this.jobCancelledSubject.next({});
     });
 
-    this.hubConnection.on('job-error"', (message) => {
-      console.log(`job-error": ${message}`);
-
-      this.jobDataCompleteSubject.next({});
+    this.hubConnection.on('job-error', (message) => {
+      console.error(`job-error": ${message}`);
+      this.jobErrorSubject.next(message);
     });
 
     this.hubConnection.onclose((e) => {

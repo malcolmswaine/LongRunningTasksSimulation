@@ -1,10 +1,11 @@
 ﻿using Hangfire.Server;
 using Microsoft.AspNetCore.SignalR;
-using OI.Web.Services.Models;
+using OI.Web.Services.Infrastructure.Exceptions;
 using OI.Web.Services.Models.Enums;
 
 namespace OI.Web.Services
 {
+    [HangfireExceptionHandler]
     public class LongRunningTask(ILogger<LongRunningTask> logger, 
         IHubContext<JobsHub> hubContext,
         ICheckPoint checkPoint,
@@ -12,6 +13,7 @@ namespace OI.Web.Services
     {
         Random random = new();
 
+        [HangfireExceptionHandler]
         public async Task<string> ExecuteAsync(CancellationToken cancellationToken, string sigrConnId,
             string originalString, string encodedString, PerformContext context)
         {
@@ -36,7 +38,7 @@ namespace OI.Web.Services
                         return sentToClient;
                     }
                     else
-                    {
+                    {                        
                         // Random wait
                         var delay = random.Next(1, 5);
                         await taskDelay.Delay(delay * 1000);
@@ -57,7 +59,8 @@ namespace OI.Web.Services
                 {
                     logger.LogError(e, "Exception thrown running job steps", null);
                     checkPoint.JobProgress(int.Parse(jobId), JobStateEnum.Error, e.ToString());
-                    await hubContext.Clients.Client(sigrConnId).SendAsync("job-error", "There was an error processing the job");
+                    await hubContext.Clients.Client(sigrConnId).SendAsync("job-error", "Server Error");
+                    return sentToClient;
                 }
             }
 

@@ -3,20 +3,20 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
 
-namespace OI.Web.Services.Infrastructure
+namespace OI.Web.Services.Infrastructure.Exceptions
 {
-    
 
-    public class GlobalExceptionHandler : IExceptionHandler
+
+    public class HttpGlobalExceptionHandler : IExceptionHandler
     {
-        private readonly ILogger<GlobalExceptionHandler> _logger;
+        private readonly ILogger<HttpGlobalExceptionHandler> _logger;
 
-        public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) =>
+        public HttpGlobalExceptionHandler(ILogger<HttpGlobalExceptionHandler> logger) =>
             _logger = logger;
 
 
-        public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, 
-            Exception exception, 
+        public async ValueTask<bool> TryHandleAsync(HttpContext httpContext,
+            Exception exception,
             CancellationToken cancellationToken)
         {
             _logger.LogError(exception, $"Exception ocurred: {exception.Message}");

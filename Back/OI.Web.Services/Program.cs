@@ -2,10 +2,12 @@ using Ganss.Xss;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using OI.Web.Services;
 using OI.Web.Services.Infrastructure;
+using OI.Web.Services.Infrastructure.Exceptions;
 using OI.Web.Services.Models;
 
 Console.WriteLine("--> Starting Job Server");
@@ -43,12 +45,16 @@ builder.Services.AddTransient<LongRunningTask>();
 // We need to keep a record of the running tasks in memory in case we need to cancel them
 builder.Services.AddSingleton<LongRunningTasks>();
 // Global exception handling service
-builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddExceptionHandler<HttpGlobalExceptionHandler>();
+builder.Services.AddSingleton<HubGlobalExceptionFilter>();
 builder.Services.AddProblemDetails();
 
 
 // Use signalling to inform clients of job status
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options =>
+{
+    options.AddFilter<HubGlobalExceptionFilter>();
+});
 
 var app = builder.Build();
 

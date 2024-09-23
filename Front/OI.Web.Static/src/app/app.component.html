@@ -61,7 +61,9 @@
       <p class="connection">
         <span>Task Error: </span>
         <span class="connection-icon offline"></span>
-        <span class="cancel" (click)="retry()">retry</span>
+        You can
+        <span class="cancel" (click)="retry()">retry</span>or
+        <span class="cancel" (click)="reset()">reset</span>
       </p>
       <p>
         <span>Sorry, there was error processing your task: {{error}}</span>
