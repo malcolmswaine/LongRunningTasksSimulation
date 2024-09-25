@@ -21,6 +21,8 @@ namespace OI.Web.Services
             string jobId = context.BackgroundJob.Id;
             string sentToClient = "";
 
+            logger.LogInformation($"Starting job {jobId}");
+
             // Save a record of the job starting
             checkPoint.JobStart(int.Parse(jobId), originalString, encodedString);
 

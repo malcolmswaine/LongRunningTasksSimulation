@@ -1,6 +1,7 @@
 using Ganss.Xss;
 using Hangfire;
 using Hangfire.PostgreSql;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.SignalR;
@@ -9,6 +10,7 @@ using OI.Web.Services;
 using OI.Web.Services.Infrastructure;
 using OI.Web.Services.Infrastructure.Exceptions;
 using OI.Web.Services.Models;
+using Prometheus;
 
 Console.WriteLine("--> Starting Job Server");
 
@@ -65,6 +67,8 @@ var app = builder.Build();
     app.UseSwaggerUI();
 //}
 
+// Prometheus Logging
+app.UseHttpMetrics();
 
 // For demo let's keep it simple and migrate every time
 using (var scope = app.Services.CreateScope())
@@ -111,7 +115,11 @@ app.MapPost("Jobs", async (
             null));
 
     // We need to map the jobs to the cancellation tokens
-    longRunningTasks.Tasks.Add(jobId, cancellationTokenSource);
+    bool added = longRunningTasks.Tasks.TryAdd(jobId, cancellationTokenSource);
+    if (!added)
+    { 
+        return Results.BadRequest("Error mapping task to connection");
+    }
 
     // Let the caller know, we've started the job
     await hubContext.Clients.Client(sigrConnId).SendAsync("ReceiveNotification", $"Started processing job with ID: {jobId}");
@@ -167,7 +175,7 @@ app.MapPut("jobs/{jobId}", async (string jobId,
 app.UseExceptionHandler();
 
 app.UseWebSockets();
-app.UseRouting();
+app.UseRouting(); //.UseEndpoints(endpoints => endpoints.MapMetrics()); // Map Prometheus
 
 app.UseCors(x => x
     .AllowAnyMethod()
@@ -176,6 +184,8 @@ app.UseCors(x => x
     .AllowCredentials());
 
 app.MapHub<JobsHub>("jobshub");
+app.MapMetrics(); // Prometheus endpoint
+
 
 app.Run();
 
