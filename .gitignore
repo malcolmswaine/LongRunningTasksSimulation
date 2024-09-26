@@ -19,3 +19,7 @@
 /DB/.containers/db
 /Back/OI.Web.Tests.Int/bin/Debug/net8.0
 /Back/OI.Web.Tests.Int/obj
+/Back/Oi.JobProcessing/bin/Debug/net8.0
+/Back/Oi.JobProcessing/obj
+/Back/Oi.Lib.Shared/obj
+/Back/Oi.Lib.Shared/bin/Debug/net8.0
