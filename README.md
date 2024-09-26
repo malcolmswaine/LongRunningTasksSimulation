@@ -115,7 +115,7 @@ With a command prompt drop into the project Bus folder\
   $\<Project Root\>cd Bus
   
 Run the docker compose up command\
-$\<Project Root\Back\>docker-compose up
+$\<Project Root\Bus\>docker-compose up
 
 This should bring up a rabbitmq container with default ports 15672 and 5672
 
