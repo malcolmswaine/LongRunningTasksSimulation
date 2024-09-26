@@ -6,7 +6,15 @@ services:
     #network_mode: host
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: DockerfileWebServices
     ports:
       - "8000:8000"
-      #- "8001:8001"
+
+  oi.jobprocessing:
+    image: oijobprocessing
+    #network_mode: host
+    build:
+      context: .
+      dockerfile: DockerfileJobProcessing
+    ports:
+      - "8005:8005"

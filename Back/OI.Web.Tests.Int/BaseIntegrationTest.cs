@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using OI.Web.Services.Models;
+using OI.JobProcessing.Models;
+
 
 namespace OI.Web.Tests.Int
 {

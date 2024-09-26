@@ -15,6 +15,9 @@ export class SignalRService {
   // Get notification of task step complete on server
   jobDataReceivedSubject = new Subject<string>();
 
+  // Get notification of task step complete on server
+  jobStartedSubject = new Subject<string>();
+
   // Job is complete
   jobDataCompleteSubject = new Subject();
 
@@ -39,16 +42,30 @@ export class SignalRService {
         }})
       .build();
     
-    this.hubConnection.on('job-processing-step', (message) => {
 
+    this.hubConnection.on('job-requested', (message) => {
+      console.log(`job-requested": ${message}`);
+      //this.jobErrorSubject.next(message);
+    });
+
+    this.hubConnection.on('job-started', (message) => {
+      console.log(`job-started": ${message}`);
+      this.jobStartedSubject.next(message);
+    });
+
+
+    this.hubConnection.on('job-processing-step', (message) => {
+      console.log(`job-processing-step: ${message}`);
       this.jobDataReceivedSubject.next(message);
     });
 
-    this.hubConnection.on('job-complete', (message) => {      
+    this.hubConnection.on('job-complete', (message) => {     
+      console.log(`job-complete: ${message}`); 
       this.jobDataCompleteSubject.next({});
     });
 
-    this.hubConnection.on('job-cancelled', (message) => {     
+    this.hubConnection.on('job-cancelled', (message) => {  
+      console.log(`job-cancelled}`);    
       this.jobCancelledSubject.next({});
     });
 

@@ -12,8 +12,8 @@ EXPOSE 8000
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["OI.Web.Services/OI.Web.Services.csproj", "OI.Web.Services/"]
-RUN dotnet restore "./OI.Web.Services/OI.Web.Services.csproj"
+COPY ["OI.Web.Services.csproj", "OI.Web.Services/"]
+RUN dotnet restore "./OI.Web.Services.csproj"
 COPY . .
 WORKDIR "/src/OI.Web.Services"
 RUN dotnet build "./OI.Web.Services.csproj" -c $BUILD_CONFIGURATION -o /app/build

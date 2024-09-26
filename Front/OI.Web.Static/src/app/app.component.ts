@@ -58,6 +58,16 @@ export class AppComponent implements OnInit, OnDestroy {
     })
 
     // Job is complete
+    this.signalRService.jobStartedSubject
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+       )
+      .subscribe(jobId => {
+        this.runningState = RunningStateEnum.Running;
+        this.currentProcessingJobId = jobId;
+    })
+
+    // Job is complete
     this.signalRService.jobDataCompleteSubject
       .pipe(
         takeUntil(this.ngUnsubscribe)

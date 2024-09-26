@@ -2,14 +2,31 @@
 
 # Overview
 
-This project simulates a long running server task.
+This project simulates long running server tasks in a microservice environment.
 
-The client is expected to stay updated of the task real-time, and while the task is active is allow to cancel, which cancels the task on the server gracefully.
 
-If the client is disconnected, then they should be informed, and the app should attempt to reconnect when the server is available.
+##Basic Happy Days Workflow
+The Front End sends a string to be decoded to the Web App REST/Signalling server (OI.Web.Service)
 
-Jobs on the server should provide resilient to server failure and persistence for recovery and audit.
+The REST API receives the request and adds a JobCreationRequest message to the message bus (RabiitMQ)
 
+The Job Processing microservice (OI.JobProcessing) consumes the JobCreationRequest message.
+
+The Job Processing microservice starts the simulation of a long running job using timer delays.
+
+The Job Processing microservice then adds a JobCreationResponse message to the message bus
+
+The Web App consumes the message and using SignalR informs the Front End using sockets that the job has been created.
+
+The Job Processing microservice continues to process the task in time increments and every time it completes an increment, puts a JobProcessingStepResponse on the service bus. It also logs a checkpoint to the database in case the task fails, and needs to be analyzed 
+
+The Web App consumes the JobProcessingStepResponse message and signals the Front End that a task increment has been completed, along with the current task results.
+
+The Job Processing microservice finished the task.
+
+The Job Processing microservice puts a JobComplete message on the bus.
+
+The Web App consumes the JobComplete message and signals the Front End that the task is done.
 
 ###Example of the app functioning:
 input = "Hello, World!". Generated base64="SGVsbG8sIFdvcmxkIQ=="\
@@ -25,6 +42,21 @@ Random pause… "SG"\
 Random pause… "SGV"\
 Random pause… "SGVs"\
 Etc.
+
+==================
+
+The client is expected to stay updated of the task real-time, and while the task is active is allow to cancel, which cancels the task on the server gracefully.
+
+If the client is disconnected, then they should be informed, and the app should attempt to reconnect when the server is available.
+
+Jobs on the server should provide resilient to server failure and persistence for recovery and audit.
+
+Jobs can be monitored using the Hangfire UI http://containerurl/hangfire
+
+The queue can be monitored using the RabbitMQ dashboard by accessing the exposed container port using a browser
+
+
+
 
 # Running the project
   
@@ -67,8 +99,23 @@ Run the docker compose up command\
 $\<Project Root\DB\>docker-compose up
 
 This should bring up a Postgres instance in a container with port 5432 exposed.
- 
-## Bank end .NET
+
+
+## Message Bus (RabbitMQ)
+
+With a command prompt drop into the project Bus folder\
+  $\<Project Root\>cd Bus
+  
+Run the docker compose up command\
+$\<Project Root\Back\>docker-compose up
+
+This should bring up a rabbitmq container with default ports 15672 and 5672
+
+Open the Rabbit Dashboard on\
+http://localhost:15672/
+
+
+## Bank end .NET x2
 
 With a command prompt drop into the project Back folder\
   $\<Project Root\>cd Back
@@ -83,6 +130,7 @@ The new container instance should create a web server exposing http on port 8000
 Open the swagger gen to check everything is working 
 
 http://localhost:8000/swagger/index.html
+http://localhost:8005/swagger/index.html
 
 ## Front end
 
@@ -118,6 +166,15 @@ Username=postgres\
 Password=postgres\
 Port=5432
 
+## Message Bus
+
+You can download and install RabbitMQ from\
+https://www.rabbitmq.com/docs/download
+
+
+Run it locally with default ports 15672 and 5672
+
+
 ## Bank end
 Make sure the supporting database is online from the previous step
 
@@ -131,6 +188,8 @@ Ensure that the launch configuration is set to **http**
 Run the project OI.Web.Services project; this will launch the default swagger UI at:
 
 http://localhost:8000/swagger/index.html
+
+
 
 ## Front end
 Make sure the supporting database and the back end are both online.

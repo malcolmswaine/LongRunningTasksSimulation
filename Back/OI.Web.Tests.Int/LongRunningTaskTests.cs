@@ -4,10 +4,11 @@ using Hangfire.Storage;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
+using Oi.JobProcessing.Infrastructure.Jobs;
+using Oi.JobProcessing.Infrastructure.Tasks;
+using Oi.Lib.Shared;
+using OI.JobProcessing.Infrastructure;
 using OI.Web.Services;
-using OI.Web.Services.Infrastructure;
-using OI.Web.Services.Models.Enums;
-using System.Threading;
 
 namespace OI.Web.Tests.Int
 {
@@ -21,6 +22,7 @@ namespace OI.Web.Tests.Int
         private CancellationToken cancellationToken;
         private Mock<IStorageConnection> storageConnection;
         private Mock<IJobCancellationToken> jobCancellationToken;
+        private Mock<IMessageBusPublisher> messageBusPublisher;
 
         public LongRunningTaskTests(IntegrationTestWebAppFactory factory) : base(factory)
         {
@@ -28,6 +30,7 @@ namespace OI.Web.Tests.Int
             mockHub = new Mock<IHubContext<JobsHub>>();
             mockClients = new Mock<IHubClients>();
             mockClient = new Mock<ISingleClientProxy>();
+            messageBusPublisher = new Mock<IMessageBusPublisher>();
             cancellationToken = new CancellationTokenSource().Token;
 
             mockClients.Setup(clients => clients.Client(It.IsAny<string>())).Returns(mockClient.Object);
@@ -38,7 +41,9 @@ namespace OI.Web.Tests.Int
             taskDelay.Setup(m => m.Delay(It.IsAny<int>()));
 
             storageConnection = new Mock<IStorageConnection>();
-            jobCancellationToken = new Mock<IJobCancellationToken>();            
+            jobCancellationToken = new Mock<IJobCancellationToken>();
+
+            messageBusPublisher.Setup(m => m.SendMessage(It.IsAny<MessageTypeEnum>(), It.IsAny<string>(), It.IsAny<string>()));
         }
 
         [Fact]
@@ -58,15 +63,15 @@ namespace OI.Web.Tests.Int
 
             // Act
             var testLongRunningTask = new LongRunningTask(logger,
-                mockHub.Object, checkpoint, taskDelay.Object);
+                checkpoint, taskDelay.Object, messageBusPublisher.Object);
 
             var transformed = StringTransformer.Base64Encode(testString);
 
             var processedString = await testLongRunningTask.ExecuteAsync(
                 cancellationToken,
-                "",
                 testString,
                 transformed,
+                "",
                 performContext);
 
 
@@ -75,7 +80,7 @@ namespace OI.Web.Tests.Int
             Assert.Equal(jobRecord.OriginalString, testString);
             Assert.Equal(jobRecord.EncodedString, expected);
             Assert.Equal(jobRecord.ReturnedData, expected);
-            Assert.Equal(jobRecord.JobStateId, (int)JobStateEnum.Complete);
+            Assert.Equal(jobRecord.JobStateId, (int)Oi.Lib.Shared.JobStateEnum.Complete);
 
             Assert.Equal(expected, processedString);
         }
@@ -101,7 +106,7 @@ namespace OI.Web.Tests.Int
 
             // Act
             var testLongRunningTask = new LongRunningTask(logger,
-                mockHub.Object, checkpoint, taskDelay.Object);
+                checkpoint, taskDelay.Object, messageBusPublisher.Object);
 
             var transformed = StringTransformer.Base64Encode(testString);
 
@@ -110,9 +115,9 @@ namespace OI.Web.Tests.Int
 
             var processedString = await testLongRunningTask.ExecuteAsync(
                 cancellationTokenSource.Token,
-                "",
                 testString,
                 transformed,
+                "",
                 performContext);
 
 
@@ -121,7 +126,7 @@ namespace OI.Web.Tests.Int
             Assert.Equal(jobRecord.OriginalString, testString);
             Assert.Equal(jobRecord.EncodedString, expected);
             Assert.Equal(jobRecord.ReturnedData, String.Empty);
-            Assert.Equal(jobRecord.JobStateId, (int)JobStateEnum.Cancelled);
+            Assert.Equal(jobRecord.JobStateId, (int)Oi.Lib.Shared.JobStateEnum.Cancelled);
 
             Assert.Equal(String.Empty, processedString);
         }

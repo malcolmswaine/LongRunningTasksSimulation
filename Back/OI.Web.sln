@@ -9,7 +9,11 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OI.Web.Services.Test", "OI.Web.Services.Test\OI.Web.Services.Test.csproj", "{D35FE3A5-1AFC-47FD-BEB9-C0D12F1F6E5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OI.Web.Tests.Int", "OI.Web.Tests.Int\OI.Web.Tests.Int.csproj", "{6141C679-0961-4F26-8249-A8C4C457B12C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OI.Web.Tests.Int", "OI.Web.Tests.Int\OI.Web.Tests.Int.csproj", "{6141C679-0961-4F26-8249-A8C4C457B12C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oi.JobProcessing", "Oi.JobProcessing\Oi.JobProcessing.csproj", "{BDCD5A58-2D13-47D2-9EA8-F2DF45BF7C07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oi.Lib.Shared", "Oi.Lib.Shared\Oi.Lib.Shared.csproj", "{474F7283-D20E-42EA-B3AC-5E6248A41D75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{6141C679-0961-4F26-8249-A8C4C457B12C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6141C679-0961-4F26-8249-A8C4C457B12C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6141C679-0961-4F26-8249-A8C4C457B12C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDCD5A58-2D13-47D2-9EA8-F2DF45BF7C07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDCD5A58-2D13-47D2-9EA8-F2DF45BF7C07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDCD5A58-2D13-47D2-9EA8-F2DF45BF7C07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDCD5A58-2D13-47D2-9EA8-F2DF45BF7C07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{474F7283-D20E-42EA-B3AC-5E6248A41D75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{474F7283-D20E-42EA-B3AC-5E6248A41D75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{474F7283-D20E-42EA-B3AC-5E6248A41D75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{474F7283-D20E-42EA-B3AC-5E6248A41D75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Oi.JobProcessing\Oi.JobProcessing.csproj" />
     <ProjectReference Include="..\OI.Web.Services\OI.Web.Services.csproj" />
   </ItemGroup>
 

@@ -1,13 +1,13 @@
-using Hangfire.Server;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Logging;
-using Moq;
-using OI.Web.Services.Models;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.OpenApi.Any;
-using OI.Web.Services.Infrastructure;
-using Hangfire.Storage;
 using Hangfire;
+using Hangfire.Server;
+using Hangfire.Storage;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
+using Oi.JobProcessing.Infrastructure.Jobs;
+using Oi.JobProcessing.Infrastructure.Tasks;
+using Oi.Lib.Shared;
+using OI.JobProcessing.Infrastructure;
 
 namespace OI.Web.Services.Test
 {
@@ -23,6 +23,7 @@ namespace OI.Web.Services.Test
         private Mock<IStorageConnection> storageConnection;
         private Mock<IJobCancellationToken> jobCancellationToken;
         private Mock<ICheckPoint> checkPointMock;
+        private Mock<IMessageBusPublisher> messageBusPublisher;
 
         private BackgroundJob backgroundJob;
         private PerformContext performContext;
@@ -34,6 +35,7 @@ namespace OI.Web.Services.Test
             mockHub = new Mock<IHubContext<JobsHub>>();
             mockClients = new Mock<IHubClients>();
             mockClient = new Mock<ISingleClientProxy>();
+            messageBusPublisher = new Mock<IMessageBusPublisher>();
             cancellationToken = new CancellationTokenSource().Token;
 
             mockClients.Setup(clients => clients.Client(It.IsAny<string>())).Returns(mockClient.Object);
@@ -51,6 +53,8 @@ namespace OI.Web.Services.Test
 
             backgroundJob = new BackgroundJob("1", null, DateTime.Now);
             performContext = new PerformContext(storageConnection.Object, backgroundJob, jobCancellationToken.Object);
+
+            messageBusPublisher.Setup(m => m.SendMessage(It.IsAny<MessageTypeEnum>(), It.IsAny<string>(), It.IsAny<string>()));
         }
 
         /// <summary>
@@ -82,21 +86,21 @@ namespace OI.Web.Services.Test
 
             // Act
             var testLongRunningTask = new LongRunningTask(logger,
-                mockHub.Object, checkPointMock.Object, taskDelay.Object);
+                checkPointMock.Object, taskDelay.Object, messageBusPublisher.Object);
 
             var transformed = StringTransformer.Base64Encode(testString);
 
             var processedString = await testLongRunningTask.ExecuteAsync(
                 cancellationToken,
-                "",
                 testString,
                 transformed,
+                "",
                 performContext);
 
 
             // Assert
             Assert.That(checkPointMock.Invocations.Count(), Is.EqualTo(22));
-            Assert.That(mockClient.Invocations.Count(), Is.EqualTo(21));
+            Assert.That(messageBusPublisher.Invocations.Count(), Is.EqualTo(21));
             Assert.That(processedString, Is.EqualTo(expected));
         }
 
@@ -113,7 +117,7 @@ namespace OI.Web.Services.Test
 
             // Act
             var testLongRunningTask = new LongRunningTask(logger,
-                mockHub.Object, checkPointMock.Object, taskDelay.Object);
+                checkPointMock.Object, taskDelay.Object, messageBusPublisher.Object);
 
             var transformed = StringTransformer.Base64Encode(testString);
 
@@ -122,14 +126,14 @@ namespace OI.Web.Services.Test
 
             var processedString = await testLongRunningTask.ExecuteAsync(
                 cancellationTokenSource.Token,
-                "",
                 testString,
                 transformed,
+                "",
                 performContext);
 
 
             // Assert
-            Assert.That(mockClient.Invocations.Count(), Is.EqualTo(1)); // we told the client we cancelled
+            Assert.That(messageBusPublisher.Invocations.Count(), Is.EqualTo(1)); // we told the client we cancelled
             Assert.That(processedString, Is.EqualTo(expected));
         }
     }
