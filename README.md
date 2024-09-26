@@ -137,7 +137,7 @@ The new container instance should create a web server exposing http on port 8000
 
 Open the swagger gen to check everything is working 
 
-http://localhost:8000/swagger/index.html
+http://localhost:8000/swagger/index.html\
 http://localhost:8005/swagger/index.html
 
 ## Front end
