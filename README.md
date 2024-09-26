@@ -4,6 +4,14 @@
 
 This project simulates long running server tasks in a microservice environment.
 
+The project is composed of an Angular Front End and 2 .NET Back End Microservices that communicate through a service bus.
+
+As with any long running task, the client is expected to be updated asynchoronously on the task process. We use SignalR here inform the client real-time of job progress, without the need to poll the server.
+
+The actual job is run by hangfire so that it is resilient and can be both restarted and monitored using the hangfire dashboard.
+
+When the task is complete, the Front End is updated.
+
 
 ## Basic Happy Days Workflow
 The Front End sends a string to be decoded to the Web App REST/Signalling server (OI.Web.Service)
