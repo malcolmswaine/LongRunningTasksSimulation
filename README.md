@@ -10,7 +10,7 @@ As with any long running task, the client is expected to be updated asynchoronou
 
 The actual job is run by hangfire so that it is resilient and can be both restarted and monitored using the hangfire dashboard.
 
-When the task is complete, the Front End is updated.
+When the task is complete, the Front End is alerted, and the user can run another task.
 
 
 ## Basic Happy Days Workflow
