@@ -5,7 +5,7 @@
 This project simulates long running server tasks in a microservice environment.
 
 
-##Basic Happy Days Workflow
+## Basic Happy Days Workflow
 The Front End sends a string to be decoded to the Web App REST/Signalling server (OI.Web.Service)
 
 The REST API receives the request and adds a JobCreationRequest message to the message bus (RabiitMQ)
@@ -28,7 +28,7 @@ The Job Processing microservice puts a JobComplete message on the bus.
 
 The Web App consumes the JobComplete message and signals the Front End that the task is done.
 
-###Example of the app functioning:
+### Example of the app functioning:
 input = "Hello, World!". Generated base64="SGVsbG8sIFdvcmxkIQ=="\
 What web client receives from the server:\
 Random pause… "S"\
@@ -43,7 +43,7 @@ Random pause… "SGV"\
 Random pause… "SGVs"\
 Etc.
 
-==================
+## ==================
 
 The client is expected to stay updated of the task real-time, and while the task is active is allow to cancel, which cancels the task on the server gracefully.
 
