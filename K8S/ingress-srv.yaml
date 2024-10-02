@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+  rules:
+    - host: host.docker.internal
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: oiwebstatic-clusterip-srv
+              port: 
+                number: 4200
+        - path: /Swagger
+          pathType: Prefix
+          backend:
+            service:
+              name: oiwebservices-clusterip-srv
+              port: 
+                number: 8080
+        - path: /metrics
+          pathType: Prefix
+          backend:
+            service:
+              name: oijobprocessing-clusterip-srv
+              port: 
+                number: 8005
+

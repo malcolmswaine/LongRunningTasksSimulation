@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oijobprocessing-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: oijobprocessing
+  template:
+    metadata:
+      labels:
+        app: oijobprocessing
+    spec:
+      containers:
+        - name: oijobprocessing
+          image: malcolmswaine/oijobprocessing:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oijobprocessing-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: oijobprocessing
+  ports: 
+    - name: oijobprocessing
+      protocol: TCP
+      port: 8005
+      targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oijobprocessing-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: oijobprocessing
+  ports:
+  - name: http-port
+    protocol: TCP
+    port: 8005
+    targetPort: 8080

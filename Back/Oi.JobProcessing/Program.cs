@@ -65,11 +65,11 @@ var app = builder.Build();
 app.UseHttpMetrics();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 
 // For demo let's keep it simple and migrate every time

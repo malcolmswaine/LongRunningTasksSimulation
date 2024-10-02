@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oiwebstatic-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: oiwebstatic
+  template:
+    metadata:
+      labels:
+        app: oiwebstatic
+    spec:
+      containers:
+        - name: oiwebstatic
+          image: malcolmswaine/oiwebstatic:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oiwebstatic-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: oiwebstatic
+  ports: 
+    - name: oiwebstatic
+      protocol: TCP
+      port: 4200
+      targetPort: 4200
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oiwebstatic-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: oiwebstatic
+  ports:
+  - name: http-port
+    protocol: TCP
+    port: 4200
+    targetPort: 4200

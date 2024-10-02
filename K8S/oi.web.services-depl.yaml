@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oiwebservices-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: oiwebservices
+  template:
+    metadata:
+      labels:
+        app: oiwebservices
+    spec:
+      containers:
+        - name: oiwebservices
+          image: malcolmswaine/oiwebservices:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oiwebservices-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: oiwebservices
+  ports: 
+    - name: oiwebservices
+      protocol: TCP
+      port: 8000
+      targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oiwebservices-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: oiwebservices
+  ports:
+  - name: http-port
+    protocol: TCP
+    port: 8000
+    targetPort: 8080

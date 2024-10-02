@@ -1,0 +1,90 @@
+Build and push local images to dockerhub
+========================================
+
+OI Webserices
+--------------------------------------
+# Build
+C:\Projects\OneInc\Back>docker build -f DockerfileWebServices -t malcolmswaine/oiwebservices .
+
+# Push
+C:\Projects\OneInc\Back>docker push malcolmswaine/oiwebservices
+
+
+OI Webserices
+-------------------------------------
+# Build
+C:\Projects\OneInc\Back>docker build -f DockerfileJobProcessing -t malcolmswaine/oijobprocessing .
+
+# Push
+C:\Projects\OneInc\Back>docker push malcolmswaine/oijobprocessing
+
+
+OI Webstatic
+-------------------------------------
+# Build
+C:\Projects\OneInc\Front>docker build -t malcolmswaine/oiwebstatic .
+
+# Push
+C:\Projects\OneInc\Front>docker push malcolmswaine/oiwebstatic
+
+
+
+
+Deploy to Kubernetes
+=====================================
+
+Do these in order for new cluster...
+
+Database
+-----------------------------------
+C:\Projects\OneInc\K8S>kubectl apply -f postgres-depl.yaml
+Check db is up - PGAdmin
+
+Rabbit MQ
+-----------------------------------
+C:\Projects\OneInc\K8S>kubectl apply -f rabbitmq.depl.yaml
+Check rabbit is up - http://localhost:15672/
+
+OI Web Static (Angular front end)
+-----------------------------------
+C:\Projects\OneInc\K8S>kubectl apply -f oi.web.static-depl.yaml
+
+OI Job Processing (.NET Hangfire job service)
+-----------------------------------
+C:\Projects\OneInc\K8S>kubectl apply -f oi.jobprocessing-depl.yaml
+
+OI Web Services (.NET Web endpoint and SignalR)
+-----------------------------------
+C:\Projects\OneInc\K8S>kubectl apply -f oi.web.services-depl.yaml
+
+Ingress
+-----------------------------------
+# Create the nginx ingress
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.11.2/deploy/static/provider/cloud/deploy.yaml
+
+# Check the pods
+kubectl get pods --namespace=ingress-nginx
+
+# Check the services
+kubectl get services --namespace=ingress-nginx
+
+# Set up gateway routing
+
+C:\Projects\OneInc\K8S>kubectl apply -f ingress-srv.yaml
+
+
+
+
+Useful commands
+=====================================
+
+# Get deployments
+kubectl get deployments
+
+#Remove a deployment
+kubectl delete deployment <deployment name>
+
+kubectl delete deployment oiwebservices-depl
+
+
+
